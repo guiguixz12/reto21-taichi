@@ -1,5 +1,5 @@
 const CHECKOUT_URL = "https://pay.hotmart.com/H108602514B";
-const PIXEL_ID = "XXXX";
+const PIXEL_ID = "4602328760095140";
 const CONSENT_KEY = "tai_chi_cookie_consent";
 
 (function () {
