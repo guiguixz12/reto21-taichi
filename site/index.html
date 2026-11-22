@@ -1,128 +1,134 @@
 <!doctype html>
 <html lang="es">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Reto 21 Días: Tai Chi en Silla para mayores de 50</title>
-  <meta name="description" content="Movimientos suaves de tai chi en silla durante 10 minutos al día, desde casa y sin experiencia, para mayores de 50.">
-  <meta property="og:type" content="website"><meta property="og:title" content="Reto 21 Días: Tai Chi en Silla para mayores de 50"><meta property="og:description" content="Movimientos suaves, sin impacto y sin experiencia. Solo 10 minutos al día desde casa."><meta property="og:image" content="https://app-saas-reto21-taichi.2hj7na.easypanel.host/hero.jpg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
-  <noscript><link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"></noscript>
-  <script>
-  (function(){
-    var l=document.createElement('link');
-    var pg=new URLSearchParams(window.location.search).get('quiz')==='0';
-    if(pg){l.rel='stylesheet';}
-    else{l.rel='preload';l.setAttribute('as','style');l.onload=function(){this.onload=null;this.rel='stylesheet';};}
-    l.href='styles.css';
-    document.head.appendChild(l);
-  })();
-  </script>
-  <script src="main.js" defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#4a7c59">
+  <title>Test de Rigidez · Tai Chi en Silla</title>
+  <meta name="description" content="Descubre tu nivel de rigidez en 1 minuto y recibe un plan adaptado para hacer desde tu silla.">
 
-  <!-- ══ QUIZ CONFIG — edita estas 4 variables ══ -->
+  <!-- ══ CONFIG — edita estas 4 variables ══ -->
   <script>
     var QCFG = {
       PIXEL_ID:             'TU_PIXEL_ID',
-      CHECKOUT_URL:         'https://go.hotmart.com/H108602514B',
+      CHECKOUT_URL:         'https://pay.hotmart.com/H108602514B',
       VIDEO_URL:            'https://tudominio.com/vsl.mp4',
       BUTTON_DELAY_SECONDS: 0
     };
   </script>
 
   <style>
-    /* ── Quiz overlay ─────────────────────────────── */
-    #qz-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 9000;
-      background: #f7f3ec;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    #qz-overlay.qz-hidden { display: none; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    .qz-wrap {
+    :root {
+      --green:       #4a7c59;
+      --green-dark:  #376145;
+      --green-light: #e8f0eb;
+      --beige:       #f7f3ec;
+      --text:        #1a1a1a;
+      --muted:       #666;
+      --white:       #ffffff;
+      --r:           14px;
+    }
+
+    html { font-size: 20px; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+                   Helvetica, Arial, sans-serif;
+      background: var(--beige);
+      color: var(--text);
+    }
+
+    /* ── Screens ─────────────────────────────────── */
+    .qz-screen {
+      display: none;
+      flex-direction: column;
+      min-height: 100dvh;
+      padding: 32px 24px;
       width: 100%;
       max-width: 520px;
-      padding: 20px 20px 48px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
+      margin: 0 auto;
+    }
+    .qz-screen.qz-active { display: flex; }
+
+    /* vertical centering for all screens except quiz questions */
+    #qz-intro,
+    #qz-loading,
+    #qz-result,
+    #qz-vsl    { justify-content: center; }
+
+    #qz-loading { align-items: center; }
+
+    /* ── Shared label ─────────────────────────────── */
+    .qz-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--green);
+      align-self: flex-start;
     }
 
-    .qz-topbar {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      margin-bottom: 4px;
+    /* ── Intro ────────────────────────────────────── */
+    #qz-intro .qz-label { margin-bottom: 16px; }
+
+    .qz-h1 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 16px;
+      color: var(--text);
     }
-    .qz-skip {
-      background: none;
-      border: none;
-      font-size: 0.72rem;
-      color: #999;
-      cursor: pointer;
-      padding: 6px 0;
-      font-family: inherit;
+    .qz-subtitle {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 32px;
     }
+
+    /* ── Questions ────────────────────────────────── */
+    .qz-quiz-top { margin-bottom: 0; }
 
     #qz-progress-bar {
       width: 100%;
       height: 7px;
       background: #d9e6dd;
       border-radius: 999px;
-      margin-bottom: 28px;
+      margin-bottom: 10px;
       overflow: hidden;
     }
     #qz-progress-fill {
       height: 100%;
-      background: #4a7c59;
+      background: var(--green);
       border-radius: 999px;
       transition: width .4s ease;
       width: 0%;
     }
-
-    .qz-screen { display: none; flex-direction: column; flex: 1; }
-    .qz-screen.qz-active { display: flex; }
-
-    .qz-hero-icon { font-size: 3rem; text-align: center; margin-bottom: 20px; }
-
-    .qz-h1 {
-      font-size: 1.45rem;
-      font-weight: 800;
-      line-height: 1.25;
-      margin-bottom: 14px;
-      color: #1a1a1a;
-    }
-    .qz-subtitle {
-      font-size: 0.88rem;
-      color: #666;
-      line-height: 1.6;
-      margin-bottom: 36px;
-    }
-
     .qz-step-label {
       font-size: 0.72rem;
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: .08em;
-      color: #4a7c59;
-      margin-bottom: 10px;
+      color: var(--green);
+      margin-bottom: 0;
+    }
+
+    /* flex-grow area: centers question + options */
+    .qz-quiz-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
     .qz-h2 {
       font-size: 1.15rem;
       font-weight: 700;
       line-height: 1.35;
       margin-bottom: 24px;
-      color: #1a1a1a;
+      color: var(--text);
     }
-
-    .qz-options { display: flex; flex-direction: column; gap: 12px; }
+    .qz-options { display: flex; flex-direction: column; gap: 14px; }
 
     .qz-opt {
       display: flex;
@@ -130,12 +136,12 @@
       gap: 14px;
       min-height: 60px;
       padding: 14px 18px;
-      background: #fff;
+      background: var(--white);
       border: 2px solid #d9e6dd;
-      border-radius: 14px;
+      border-radius: var(--r);
       font-size: 0.95rem;
       font-weight: 600;
-      color: #1a1a1a;
+      color: var(--text);
       cursor: pointer;
       text-align: left;
       transition: border-color .15s, background .15s, transform .1s;
@@ -143,33 +149,34 @@
       width: 100%;
       font-family: inherit;
     }
-    .qz-opt:active { transform: scale(.98); }
-    .qz-opt.qz-selected { border-color: #4a7c59; background: #e8f0eb; }
-    .qz-opt-emoji { font-size: 1.3rem; flex-shrink: 0; }
+    .qz-opt:active  { transform: scale(.98); }
+    .qz-opt.qz-sel  { border-color: var(--green); background: var(--green-light); }
+    .qz-opt-emoji   { font-size: 1.3rem; flex-shrink: 0; }
 
     .qz-back {
       background: none;
       border: none;
-      color: #666;
+      color: var(--muted);
       font-size: 0.8rem;
       cursor: pointer;
       padding: 10px 0;
-      margin-top: 20px;
+      margin-top: 24px;
       align-self: flex-start;
       font-family: inherit;
       -webkit-tap-highlight-color: transparent;
     }
 
+    /* ── Buttons ──────────────────────────────────── */
     .qz-btn-primary {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 100%;
       min-height: 60px;
-      background: #4a7c59;
-      color: #fff;
+      background: var(--green);
+      color: var(--white);
       border: none;
-      border-radius: 14px;
+      border-radius: var(--r);
       font-size: 1.05rem;
       font-weight: 800;
       cursor: pointer;
@@ -178,22 +185,19 @@
       font-family: inherit;
       -webkit-tap-highlight-color: transparent;
     }
-    .qz-btn-primary:active { background: #376145; }
+    .qz-btn-primary:active { background: var(--green-dark); }
 
-    #qz-loading {
-      align-items: center;
-      justify-content: center;
-      gap: 24px;
-    }
+    /* ── Loading ──────────────────────────────────── */
     .qz-loading-text {
       font-size: 1.05rem;
       font-weight: 700;
-      color: #4a7c59;
+      color: var(--green);
+      margin-bottom: 16px;
     }
     .qz-dots span {
       display: inline-block;
       width: 11px; height: 11px;
-      background: #4a7c59;
+      background: var(--green);
       border-radius: 50%;
       margin: 0 4px;
       animation: qz-bounce .9s infinite both;
@@ -205,15 +209,17 @@
       40%          { transform: scale(1);   opacity: 1;   }
     }
 
+    /* ── Result ───────────────────────────────────── */
     .qz-badge {
       display: inline-block;
+      align-self: flex-start;
       padding: 6px 18px;
       border-radius: 999px;
       font-size: 0.72rem;
       font-weight: 800;
       text-transform: uppercase;
       letter-spacing: .07em;
-      margin-bottom: 14px;
+      margin-bottom: 24px;
     }
     .qz-badge-low  { background: #d4edda; color: #1a5c2a; }
     .qz-badge-mid  { background: #fff3cd; color: #856404; }
@@ -222,49 +228,58 @@
     .qz-result-title {
       font-size: 1.3rem;
       font-weight: 800;
-      margin-bottom: 16px;
       line-height: 1.3;
-      color: #1a1a1a;
+      margin-bottom: 24px;
+      color: var(--text);
     }
     .qz-result-desc {
       font-size: 0.88rem;
       line-height: 1.65;
-      color: #666;
-      background: #fff;
-      border-radius: 14px;
+      color: var(--muted);
+      background: var(--white);
+      border-radius: var(--r);
       padding: 18px;
       margin-bottom: 24px;
-      border-left: 4px solid #4a7c59;
+      border-left: 4px solid var(--green);
     }
     .qz-result-cta {
       font-size: 0.95rem;
       font-weight: 700;
-      margin-bottom: 16px;
-      text-align: center;
-      color: #1a1a1a;
+      margin-bottom: 24px;
+      color: var(--text);
     }
 
+    /* ── VSL ──────────────────────────────────────── */
     .qz-vsl-title {
-      font-size: 1.05rem;
+      font-size: 1.3rem;
       font-weight: 800;
-      text-align: center;
-      margin-bottom: 16px;
-      line-height: 1.35;
-      color: #1a1a1a;
+      text-align: left;
+      line-height: 1.3;
+      margin-bottom: 24px;
+      color: var(--text);
     }
     .qz-video-wrap {
-      position: relative;
       width: 100%;
       aspect-ratio: 16 / 9;
-      background: #111;
-      border-radius: 14px;
+      border-radius: var(--r);
       overflow: hidden;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
     .qz-video-wrap video {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      display: block;
+    }
+    .qz-video-placeholder {
+      width: 100%;
+      height: 100%;
+      background: #e0e0e0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #888;
     }
 
     .qz-btn-checkout {
@@ -274,9 +289,9 @@
       width: 100%;
       min-height: 64px;
       background: #e8630a;
-      color: #fff;
+      color: var(--white);
       border: none;
-      border-radius: 14px;
+      border-radius: var(--r);
       font-size: 1.05rem;
       font-weight: 800;
       cursor: pointer;
@@ -293,8 +308,8 @@
     .qz-guarantee {
       text-align: center;
       font-size: 0.72rem;
-      color: #666;
-      margin-bottom: 20px;
+      color: var(--muted);
+      margin-bottom: 24px;
     }
     .qz-disclaimer {
       font-size: 0.68rem;
@@ -308,90 +323,53 @@
 </head>
 <body>
 
-<!-- ══ QUIZ OVERLAY ══════════════════════════════════════════ -->
-<div id="qz-overlay">
-  <div class="qz-wrap">
+<!-- ① Intro -->
+<div id="qz-intro" class="qz-screen qz-active">
+  <div class="qz-label">Test gratuito · 1 minuto</div>
+  <h1 class="qz-h1">¿Te cuesta moverte como antes? Descubre tu nivel de rigidez en 1 minuto</h1>
+  <p class="qz-subtitle">Responde 6 preguntas rápidas y recibe un plan adaptado para hacer desde tu silla.</p>
+  <button class="qz-btn-primary" onclick="qzStart()">Empezar el test →</button>
+</div>
 
-    <div class="qz-topbar">
-      <button class="qz-skip" onclick="qzClose()">Ver la página completa ↓</button>
-    </div>
-
-    <div id="qz-progress-bar" style="display:none">
-      <div id="qz-progress-fill"></div>
-    </div>
-
-    <!-- ① Intro -->
-    <div id="qz-intro" class="qz-screen qz-active">
-      <div class="qz-hero-icon">🧘</div>
-      <h1 class="qz-h1">¿Te cuesta moverte como antes? Descubre tu nivel de rigidez en 1 minuto</h1>
-      <p class="qz-subtitle">Responde 6 preguntas rápidas y recibe un plan adaptado para hacer desde tu silla.</p>
-      <button class="qz-btn-primary" onclick="qzStart()">Empezar el test →</button>
-    </div>
-
-    <!-- ② Pregunta -->
-    <div id="qz-quiz" class="qz-screen">
-      <div class="qz-step-label" id="qz-step"></div>
-      <h2 class="qz-h2" id="qz-qtext"></h2>
-      <div class="qz-options" id="qz-opts"></div>
-      <button class="qz-back" id="qz-back" onclick="qzBack()">← Atrás</button>
-    </div>
-
-    <!-- ③ Cargando -->
-    <div id="qz-loading" class="qz-screen">
-      <div class="qz-loading-text">Analizando tus respuestas…</div>
-      <div class="qz-dots"><span></span><span></span><span></span></div>
-    </div>
-
-    <!-- ④ Resultado -->
-    <div id="qz-result" class="qz-screen">
-      <span class="qz-badge" id="qz-badge"></span>
-      <div class="qz-result-title" id="qz-rtitle"></div>
-      <div class="qz-result-desc" id="qz-rdesc"></div>
-      <div class="qz-result-cta">Mira este vídeo corto para ver cómo funciona el Reto 21 Días 👇</div>
-      <button class="qz-btn-primary" onclick="qzGoVSL()">Ver el vídeo ahora →</button>
-    </div>
-
-    <!-- ⑤ VSL -->
-    <div id="qz-vsl" class="qz-screen">
-      <div class="qz-vsl-title">Cómo funciona el Reto 21 Días: Tai Chi en Silla</div>
-      <div class="qz-video-wrap" id="qz-video-wrap"></div>
-      <a id="qz-cta" class="qz-btn-checkout qz-hidden" href="#" onclick="qzCheckout()">
-        Quiero empezar el Reto 21 Días →
-      </a>
-      <p class="qz-guarantee">🔒 Pago único · Acceso inmediato · Garantía de 7 días</p>
-      <p class="qz-disclaimer">Este programa no sustituye el consejo médico. Consulta a tu médico si tienes alguna lesión o problema de salud.</p>
-    </div>
-
+<!-- ② Pregunta -->
+<div id="qz-quiz" class="qz-screen">
+  <div class="qz-quiz-top">
+    <div id="qz-progress-bar"><div id="qz-progress-fill"></div></div>
+    <div class="qz-step-label" id="qz-step"></div>
+  </div>
+  <div class="qz-quiz-body">
+    <h2 class="qz-h2" id="qz-qtext"></h2>
+    <div class="qz-options" id="qz-opts"></div>
+    <button class="qz-back" id="qz-back" onclick="qzBack()">← Atrás</button>
   </div>
 </div>
-<!-- ══ /QUIZ OVERLAY ══════════════════════════════════════════ -->
 
-<div id="qz-page">
-<script>
-  /* Ocultar página mientras quiz activo; script síncrono evita que el
-     navegador empiece a cargar imágenes antes de leer display:none */
-  if(new URLSearchParams(window.location.search).get('quiz')!=='0'){
-    document.getElementById('qz-page').style.display='none';
-  }
-</script>
-<header class="site-header"><div class="wrap header-inner"><a class="brand" href="#inicio"><span class="brand-mark" aria-hidden="true">✳</span><span>Reto 21 Días <small>TAI CHI EN SILLA</small></span></a><span class="header-note">Un momento para ti, cada día</span></div></header>
-<main id="inicio">
-<section class="hero"><div class="wrap hero-grid"><div class="hero-copy"><p class="eyebrow"><span></span> PARA MAYORES DE 50 · SIN EXPERIENCIA · DESDE CASA</p><h1>¿Sientes el cuerpo agarrotado por las mañanas? Solo <em>10 minutos al día sentada en una silla</em> pueden devolverte la soltura que crees que ya perdiste.</h1><p class="lead">Un reto de movimiento suave pensado para mujeres de más de 50 que quieren recuperar agilidad en casa, sin equipos y sin experiencia previa. 21 días, 10 minutos al día.</p><a class="button buy-button" href="https://go.hotmart.com/H108602514B">Quiero empezar el reto — 9,90 €</a><p class="buy-reassurance">Acceso inmediato · Pago seguro · Garantía 15 días</p></div><div class="hero-art"><img id="qz-hero" data-src="hero.jpg" src="" alt="Mujer mayor sentada en una silla abriendo los brazos en un ejercicio de tai chi" width="839" height="1400"><script>(function(){var i=document.getElementById('qz-hero'),pg=new URLSearchParams(window.location.search).get('quiz')==='0';if(pg){i.setAttribute('fetchpriority','high');}else{i.setAttribute('loading','lazy');}i.src=i.dataset.src;})();</script><div class="art-caption"><span>UN DÍA A LA VEZ</span><strong>Muévete a tu ritmo.</strong></div></div></div></section>
-<section class="section problem"><div class="wrap narrow"><p class="eyebrow">TE ENTENDEMOS</p><h2>¿Te suena esto?</h2><p class="large-copy">Con los años, el cuerpo se queja más. Te cuesta girar el cuello, agacharte o levantarte del sofá sin un quejido. El gimnasio te parece cosa de otra edad, y las clases de yoga te quedan grandes. Y así, cuanto menos te mueves, más agarrotada te sientes. Es un círculo que cuesta romper sola.</p></div></section>
-<section class="section solution"><div class="wrap solution-grid"><div><p class="eyebrow">UNA FORMA MÁS AMABLE DE MOVERTE</p><h2>La solución</h2><p class="large-copy">El tai chi es un movimiento lento, suave y sin impacto. En este reto lo hemos adaptado completamente a una silla: no tienes que estar de pie, no hay saltos ni estiramientos forzados, y no necesitas ningún material. Solo 10 minutos al día, a tu ritmo.</p></div><div class="movement-grid"><div class="movement"><img src="mov-01.jpg" alt="Movimiento de hombros hacia atrás sentada en una silla" width="839" height="1400" loading="lazy"></div><div class="movement"><img src="mov-02.jpg" alt="Postura de tai chi sentada con las manos frente al pecho" width="839" height="1400" loading="lazy"></div><div class="movement"><img src="mov-03.jpg" alt="Giro suave del tronco sentada en una silla" width="839" height="1400" loading="lazy"></div></div></div></section>
-<section class="section video-preview"><div class="wrap narrow video-preview-inner"><p class="eyebrow"><span></span> MÍRALO ANTES DE DECIDIR</p><h2>Así son los movimientos</h2><p class="lead-narrow">Lentos, suaves y controlados. Puedes seguirlos sin moverte de tu silla, sin música fuerte ni ritmos que te agobien.</p><div class="video-wrapper"><video muted loop playsinline preload="none" data-autoplay="1" width="100%"><source src="demo.mp4" type="video/mp4">Tu navegador no admite vídeo HTML5.</video></div></div></section>
-<section class="section receive"><div class="wrap receive-grid"><div class="pdf-art" role="img" aria-label="Espacio para maqueta de la guía del reto en PDF"><div class="pdf-sheet"><span>RETO 21 DÍAS</span><strong>Tai Chi<br>en Silla</strong><i aria-hidden="true">✳</i><small>GUÍA DEL RETO</small></div></div><div><p class="eyebrow">TODO LO QUE NECESITAS</p><h2>Lo que vas a recibir</h2><ul class="check-list"><li>Guía del reto en PDF, letra grande, con ilustraciones de cada movimiento</li><li>12 vídeos cortos para seguir los movimientos conmigo</li><li>Plan de 3 semanas: Despertar, Fluir y Fortalecer</li><li>Rutina express de 5 minutos para los días sin tiempo</li><li>Plan para seguir después del día 21</li></ul><p class="value-note">Todo esto por 9,90&nbsp;€ — menos que una clase de pilates.</p><a class="button buy-button section-buy" href="https://go.hotmart.com/H108602514B">Quiero empezar el reto — 9,90 €</a></div></div></section>
-<!-- ⚠️ IMPORTANTE: Sustituye estos tres testimonios por testimonios reales de tus primeras compradoras antes de publicar. Nunca publiques testimonios ficticios. -->
-<section class="section testimonials"><div class="wrap"><div class="section-heading"><p class="eyebrow">LO QUE DICEN QUIENES YA LO HAN PROBADO</p><h2>Sus palabras, no las nuestras</h2></div><div class="testimonials-grid"><figure class="testimonial-card"><blockquote><p>"Llevaba años sin moverme y me daba miedo volver a empezar. Los movimientos son tan suaves que el primer día pensé que no iba a notar nada… y al tercer día ya me levantaba con menos tensión en el cuello."</p></blockquote><figcaption><strong>María T.</strong>, 58 años · Bilbao</figcaption></figure><figure class="testimonial-card"><blockquote><p>"Lo que más me gustó es que puedo hacerlo en pijama antes del desayuno. No me cambia el día entero, pero sí los primeros minutos. Y eso se nota."</p></blockquote><figcaption><strong>Carmen R.</strong>, 63 años · Valencia</figcaption></figure><figure class="testimonial-card"><blockquote><p>"Tengo artrosis en las rodillas y me lo pensé mucho. Los movimientos no cargan las articulaciones y eso fue lo que me convenció. Llevo tres semanas y sigo."</p></blockquote><figcaption><strong>Amparo M.</strong>, 67 años · Sevilla</figcaption></figure></div></div></section>
-<section class="section audience"><div class="wrap audience-grid"><div class="audience-card"><p class="eyebrow">UN ESPACIO PARA TI</p><h2>Para quién es</h2><ul class="check-list"><li>Tienes más de 50 y quieres moverte, pero sin riesgo de hacerte daño</li><li>Te levantas agarrotada, tienes molestias en la espalda o pasas muchas horas sentada</li><li>Nunca has hecho ejercicio formal, o llevas años sin hacerlo</li><li>Buscas algo que puedas hacer en casa, a tu hora y a tu ritmo</li></ul></div><div class="audience-card muted"><p class="eyebrow">TENLO EN CUENTA</p><h2>Para quién no es</h2><ul class="dash-list"><li>Si buscas un entrenamiento intenso o perder peso rápido</li><li>Si tu médico te ha indicado reposo: consúltale antes de empezar</li></ul></div></div></section>
-<section class="section steps"><div class="wrap"><div class="section-heading"><p class="eyebrow">SENCILLO, DESDE EL PRIMER DÍA</p><h2>Cómo funciona</h2></div><ol class="steps-grid"><li><span>01</span><p>Haces el pago y recibes el acceso al momento por email</p></li><li><span>02</span><p>Abres la guía o el vídeo del día en el móvil, la tablet o el ordenador</p></li><li><span>03</span><p>Te sientas, sigues los movimientos 10 minutos y marcas el día en tu calendario</p></li></ol></div></section>
-<section class="section guarantee"><div class="wrap guarantee-inner"><div class="seal"><strong>15</strong><span>días</span></div><div><p class="eyebrow">CON TRANQUILIDAD</p><h2>Garantía</h2><p class="large-copy">Tienes 15 días para probarlo tranquilamente. Si no es lo que esperabas, te devolvemos el dinero sin complicaciones y sin que tengas que dar ninguna explicación.</p><a class="button buy-button section-buy" href="https://go.hotmart.com/H108602514B">Quiero empezar el reto — 9,90 €</a></div></div></section>
-<section class="section faq"><div class="wrap narrow"><div class="section-heading"><p class="eyebrow">ESTAMOS AQUÍ PARA AYUDARTE</p><h2>Preguntas frecuentes</h2></div><details><summary>¿Necesito experiencia?</summary><p>No. Empezamos desde cero.</p></details><details><summary>¿Qué silla uso?</summary><p>Una silla firme, sin ruedas y sin brazos si es posible.</p></details><details><summary>¿Cuánto tiempo al día?</summary><p>10 minutos. Hay una versión de 5 para los días con prisa.</p></details><details><summary>¿Es un pago único?</summary><p>Sí. 9,90 € una sola vez, sin suscripciones.</p></details><details><summary>¿Cómo recibo el acceso?</summary><p>Por email, justo después del pago.</p></details><details><summary>¿Es seguro si tengo problemas de espalda o articulaciones?</summary><p>Los movimientos son suaves y de bajo impacto, pensados para no cargar las articulaciones. Aun así, si tu médico te ha indicado reposo o tienes alguna condición diagnosticada, consulta con él antes de empezar. Este programa es de bienestar general, no terapéutico.</p></details><details><summary>¿Qué pasa si un día me lo salto?</summary><p>Nada. El reto es tuyo y lo haces a tu ritmo. Si un día no puedes, sigues al día siguiente. No hace falta empezar desde cero.</p></details></div></section>
-<section class="final-cta"><div class="wrap narrow"><p class="eyebrow">TU MOMENTO EMPIEZA AQUÍ</p><h2>Mañana por la mañana podrías despertar sintiéndote un poco mejor. Solo necesitas 10 minutos y una silla.</h2><a class="button buy-button" href="https://go.hotmart.com/H108602514B">Quiero empezar el reto — 9,90 €</a><p class="buy-reassurance">Acceso inmediato · Pago seguro · Garantía 15 días</p></div></section>
-</main>
-<footer><div class="wrap footer-inner"><div><a class="brand footer-brand" href="#inicio"><span class="brand-mark" aria-hidden="true">✳</span><span>Reto 21 Días <small>TAI CHI EN SILLA</small></span></a><p>Este programa es de bienestar general y no sustituye el consejo médico. Si tienes alguna condición de salud, consulta con tu médico antes de empezar.</p></div><nav aria-label="Información legal"><a href="aviso-legal.html">Aviso legal</a><a href="privacidad.html">Privacidad</a><a href="cookies.html">Cookies</a></nav></div></footer>
-<div class="sticky-buy" id="sticky-buy"><a class="button buy-button" href="https://go.hotmart.com/H108602514B">Quiero empezar el reto — 9,90 €</a></div>
-</div><!-- /qz-page -->
+<!-- ③ Analizando -->
+<div id="qz-loading" class="qz-screen">
+  <div class="qz-loading-text">Analizando tus respuestas…</div>
+  <div class="qz-dots"><span></span><span></span><span></span></div>
+</div>
+
+<!-- ④ Resultado -->
+<div id="qz-result" class="qz-screen">
+  <span class="qz-badge" id="qz-badge"></span>
+  <div class="qz-result-title" id="qz-rtitle"></div>
+  <div class="qz-result-desc" id="qz-rdesc"></div>
+  <div class="qz-result-cta">Mira este vídeo corto para ver cómo funciona el Reto 21 Días 👇</div>
+  <button class="qz-btn-primary" onclick="qzGoVSL()">Ver el vídeo ahora →</button>
+</div>
+
+<!-- ⑤ VSL -->
+<div id="qz-vsl" class="qz-screen">
+  <div class="qz-vsl-title">Cómo funciona el Reto 21 Días: Tai Chi en Silla</div>
+  <div class="qz-video-wrap" id="qz-video-wrap"></div>
+  <a id="qz-cta" class="qz-btn-checkout qz-hidden" href="#" onclick="qzCheckout()">
+    Quiero empezar el Reto 21 Días →
+  </a>
+  <p class="qz-guarantee">🔒 Pago único · Acceso inmediato · Garantía de 7 días</p>
+  <p class="qz-disclaimer">Este programa no sustituye el consejo médico. Consulta a tu médico si tienes alguna lesión o problema de salud.</p>
+</div>
+
 <!-- Meta Pixel (async) -->
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -399,92 +377,58 @@ n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
 n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
 t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
 (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+if(QCFG.PIXEL_ID&&QCFG.PIXEL_ID!=='TU_PIXEL_ID'){
+  fbq('init',QCFG.PIXEL_ID);
+  fbq('track','PageView');
+}
 </script>
 
-<!-- Quiz logic + A/B -->
+<!-- Quiz logic -->
 <script>
 (function(){
-  var quizActive = new URLSearchParams(window.location.search).get('quiz') !== '0';
-  var VER = quizActive ? 'quiz' : 'pagina';
-
-  /* ── Pixel ── */
-  function pxInit(){
-    if(QCFG.PIXEL_ID && QCFG.PIXEL_ID !== 'TU_PIXEL_ID'){
-      fbq('init', QCFG.PIXEL_ID);
-      fbq('track', 'PageView', {version: VER});
-    }
-  }
-  function px(ev, p){
-    if(typeof fbq !== 'function') return;
-    var params = Object.assign({version: VER}, p || {});
-    fbq('trackCustom', ev, params);
-  }
-
-  /* ── Revelar página oculta ── */
-  function revealPage(){
-    var page = document.getElementById('qz-page');
-    if(page) page.style.display = '';
-    /* Disparar autoplay en vídeos marcados */
-    document.querySelectorAll('video[data-autoplay]').forEach(function(v){
-      v.play().catch(function(){});
-    });
-  }
-
-  /* ── Init A/B ── */
-  if(quizActive){
-    document.getElementById('qz-overlay').style.display = '';
-  } else {
-    document.getElementById('qz-overlay').classList.add('qz-hidden');
-    revealPage();
-  }
-
-  pxInit();
-
-  /* ── Quiz data ── */
-  var QS = [
-    { text:'¿Qué edad tienes?', opts:[
+  var QS=[
+    {text:'¿Qué edad tienes?',opts:[
       {l:'50-59 años',e:'🌱',s:1,k:null},
       {l:'60-69 años',e:'🌿',s:2,k:null},
       {l:'70 años o más',e:'🌳',s:3,k:null}]},
-    { text:'¿Te cuesta levantarte de la silla o del sofá?', opts:[
+    {text:'¿Te cuesta levantarte de la silla o del sofá?',opts:[
       {l:'No, nada',e:'😊',s:0,k:null},
       {l:'A veces',e:'😐',s:2,k:null},
       {l:'Sí, bastante',e:'😣',s:3,k:null}]},
-    { text:'¿Dónde notas más rigidez?', opts:[
+    {text:'¿Dónde notas más rigidez?',opts:[
       {l:'Cuello y hombros',e:'🧊',s:2,k:'cuello y hombros'},
       {l:'Espalda',e:'🧊',s:2,k:'la espalda'},
       {l:'Rodillas y caderas',e:'🧊',s:2,k:'rodillas y caderas'},
       {l:'En todo el cuerpo',e:'🧊',s:3,k:'todo el cuerpo'}]},
-    { text:'¿Cuántas horas pasas sentado al día?', opts:[
+    {text:'¿Cuántas horas pasas sentado al día?',opts:[
       {l:'Menos de 4 horas',e:'🕒',s:1,k:null},
       {l:'Entre 4 y 7 horas',e:'🕕',s:2,k:null},
       {l:'Más de 7 horas',e:'🕗',s:3,k:null}]},
-    { text:'¿Has probado algún ejercicio antes?', opts:[
+    {text:'¿Has probado algún ejercicio antes?',opts:[
       {l:'Gimnasio, pero lo dejé',e:'🏋️',s:2,k:null},
       {l:'Yoga, pero era muy difícil',e:'🧘',s:2,k:null},
       {l:'Nunca he hecho nada',e:'🛋️',s:3,k:null},
       {l:'Hago algo de ejercicio',e:'🚶',s:1,k:null}]},
-    { text:'¿Cuánto tiempo podrías dedicar al día?', opts:[
+    {text:'¿Cuánto tiempo podrías dedicar al día?',opts:[
       {l:'5 minutos',e:'⏱️',s:0,k:'5 minutos'},
       {l:'10 minutos',e:'⏱️',s:0,k:'10 minutos'},
       {l:'15 minutos',e:'⏱️',s:0,k:'15 minutos'}]}
   ];
 
-  var ans=[], cur=0;
+  var ans=[],cur=0;
 
-  function qzShow(id){
+  function px(ev,p){
+    if(typeof fbq!=='function')return;
+    if(p)fbq('trackCustom',ev,p);else fbq('track',ev);
+  }
+
+  function show(id){
     document.querySelectorAll('.qz-screen').forEach(function(s){s.classList.remove('qz-active');});
     document.getElementById(id).classList.add('qz-active');
+    window.scrollTo(0,0);
   }
 
-  function qzProg(step){
-    var b=document.getElementById('qz-progress-bar');
-    if(!step){b.style.display='none';return;}
-    b.style.display='block';
-    document.getElementById('qz-progress-fill').style.width=(step/6*100)+'%';
-  }
-
-  function qzBuildUrl(){
+  function buildUrl(){
     var base=QCFG.CHECKOUT_URL;
     var src=new URLSearchParams(window.location.search);
     var fwd=['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','ad_id'];
@@ -494,20 +438,19 @@ t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
     return qs?base+(base.indexOf('?')>=0?'&':'?')+qs:base;
   }
 
+  function isValidVideo(url){
+    return url&&url!=='https://tudominio.com/vsl.mp4'&&/^https?:\/\//.test(url);
+  }
+
   window.qzStart=function(){
     px('QuizStart');
     ans=[];cur=0;
-    qzRender();
+    render();
   };
 
-  window.qzClose=function(){
-    document.getElementById('qz-overlay').classList.add('qz-hidden');
-    revealPage();
-  };
-
-  function qzRender(){
+  function render(){
     var q=QS[cur];
-    qzProg(cur+1);
+    document.getElementById('qz-progress-fill').style.width=(cur+1)/6*100+'%';
     document.getElementById('qz-step').textContent='Pregunta '+(cur+1)+' de 6';
     document.getElementById('qz-qtext').textContent=q.text;
     var c=document.getElementById('qz-opts');
@@ -516,73 +459,82 @@ t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
       var btn=document.createElement('button');
       btn.className='qz-opt';
       btn.innerHTML='<span class="qz-opt-emoji">'+o.e+'</span><span>'+o.l+'</span>';
-      if(ans[cur]&&ans[cur].l===o.l)btn.classList.add('qz-selected');
-      btn.addEventListener('click',function(){qzPick(o,btn);});
+      if(ans[cur]&&ans[cur].l===o.l)btn.classList.add('qz-sel');
+      btn.addEventListener('click',function(){pick(o,btn);});
       c.appendChild(btn);
     });
     document.getElementById('qz-back').style.visibility=cur===0?'hidden':'visible';
-    qzShow('qz-quiz');
+    show('qz-quiz');
   }
 
-  function qzPick(o,btn){
-    btn.classList.add('qz-selected');
+  function pick(o,btn){
+    btn.classList.add('qz-sel');
     ans[cur]={s:o.s,k:o.k,l:o.l};
     setTimeout(function(){
-      if(cur<QS.length-1){cur++;qzRender();}
-      else{qzLoading();}
+      if(cur<QS.length-1){cur++;render();}
+      else{loading();}
     },220);
   }
 
-  window.qzBack=function(){if(cur>0){cur--;qzRender();}};
+  window.qzBack=function(){if(cur>0){cur--;render();}};
 
-  function qzLoading(){
-    qzProg(0);
-    qzShow('qz-loading');
-    setTimeout(qzResult,2000);
+  function loading(){
+    show('qz-loading');
+    setTimeout(result,2000);
   }
 
-  function qzResult(){
+  function result(){
     var score=0;
     ans.forEach(function(a){if(a)score+=a.s;});
     var zone=(ans[2]&&ans[2].k)||'el cuerpo';
     var time=(ans[5]&&ans[5].k)||'10 minutos';
-    var level,badgeClass,title;
-    if(score<=6){level='Rigidez leve';badgeClass='qz-badge-low';title='¡Buenas noticias! Tu cuerpo responde bien';}
-    else if(score<=11){level='Rigidez moderada';badgeClass='qz-badge-mid';title='Tu cuerpo te está pidiendo más movimiento';}
-    else{level='Rigidez alta';badgeClass='qz-badge-high';title='Tu cuerpo necesita atención, pero tiene solución';}
+    var level,bc,title;
+    if(score<=6){level='Rigidez leve';bc='qz-badge-low';title='¡Buenas noticias! Tu cuerpo responde bien';}
+    else if(score<=11){level='Rigidez moderada';bc='qz-badge-mid';title='Tu cuerpo te está pidiendo más movimiento';}
+    else{level='Rigidez alta';bc='qz-badge-high';title='Tu cuerpo necesita atención, pero tiene solución';}
     var badge=document.getElementById('qz-badge');
-    badge.textContent=level;badge.className='qz-badge '+badgeClass;
+    badge.textContent=level;badge.className='qz-badge '+bc;
     document.getElementById('qz-rtitle').textContent=title;
     document.getElementById('qz-rdesc').textContent=
       'Tu cuerpo acumula tensión en '+zone+'. Con solo '+time+' al día desde tu silla puedes empezar a notar más soltura.';
     px('QuizComplete',{level:level});
-    qzShow('qz-result');
+    show('qz-result');
   }
 
   window.qzGoVSL=function(){
     var wrap=document.getElementById('qz-video-wrap');
-    if(!wrap.querySelector('video')){
-      var v=document.createElement('video');
-      v.src=QCFG.VIDEO_URL;v.controls=true;v.preload='none';v.playsInline=true;
-      wrap.appendChild(v);
-      var delay=parseInt(QCFG.BUTTON_DELAY_SECONDS,10)||0;
-      var cta=document.getElementById('qz-cta');
-      cta.href=qzBuildUrl();
-      if(delay<=0){cta.classList.remove('qz-hidden');}
-      else{
-        v.addEventListener('timeupdate',function onT(){
-          if(v.currentTime>=delay){cta.classList.remove('qz-hidden');v.removeEventListener('timeupdate',onT);}
-        });
+    if(!wrap.hasChildNodes()){
+      if(isValidVideo(QCFG.VIDEO_URL)){
+        var v=document.createElement('video');
+        v.src=QCFG.VIDEO_URL;v.controls=true;v.preload='none';v.playsInline=true;
+        v.style.cssText='width:100%;height:100%;display:block;';
+        wrap.appendChild(v);
+        var delay=parseInt(QCFG.BUTTON_DELAY_SECONDS,10)||0;
+        var cta=document.getElementById('qz-cta');
+        cta.href=buildUrl();
+        if(delay<=0){cta.classList.remove('qz-hidden');}
+        else{
+          v.addEventListener('timeupdate',function onT(){
+            if(v.currentTime>=delay){cta.classList.remove('qz-hidden');v.removeEventListener('timeupdate',onT);}
+          });
+        }
+      } else {
+        var ph=document.createElement('div');
+        ph.className='qz-video-placeholder';
+        ph.textContent='Vídeo en preparación';
+        wrap.appendChild(ph);
+        var cta2=document.getElementById('qz-cta');
+        cta2.href=buildUrl();
+        cta2.classList.remove('qz-hidden');
       }
     }
     px('ViewContent');
-    qzProg(0);
-    qzShow('qz-vsl');
+    show('qz-vsl');
   };
 
   window.qzCheckout=function(){px('InitiateCheckout');};
 })();
 </script>
 
-<div class="cookie-banner" id="cookie-banner" role="region" aria-label="Preferencias de cookies" hidden><div><strong class="cookie-title">Tu privacidad importa</strong><p><span class="cookie-desktop">Usamos cookies opcionales de Meta para medir las visitas y los clics. Puedes aceptarlas o rechazarlas. </span><span class="cookie-mobile">Usamos cookies de Meta para medir visitas. </span><a href="cookies.html"><span class="cookie-desktop">Más información</span><span class="cookie-mobile">Más info</span></a><span class="cookie-desktop">.</span></p></div><div class="cookie-actions"><button type="button" id="reject-cookies" class="button button-secondary">Rechazar</button><button type="button" id="accept-cookies" class="button">Aceptar</button></div></div>
-</body></html>
+</body>
+</html>
