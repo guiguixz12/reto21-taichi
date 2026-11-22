@@ -8,7 +8,7 @@ const CONSENT_KEY = "tai_chi_cookie_consent";
   try { consent = localStorage.getItem(CONSENT_KEY); } catch (_) { /* Consent can still apply for this visit. */ }
 
   function loadPixel() {
-    if (window.fbq || PIXEL_ID === "XXXX") return;
+    if (window.fbq) return;
     !function(f,b,e,v,n,t,s) {
       if(f.fbq)return;n=f.fbq=function(){n.callMethod ? n.callMethod.apply(n,arguments) : n.queue.push(arguments)};
       if(!f._fbq)f._fbq=n;n.push=n;n.loaded=true;n.version='2.0';n.queue=[];

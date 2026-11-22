@@ -1,0 +1,11 @@
+# Binários grandes não versionados
+brutos/
+videos-movimentos/
+
+# macOS
+.DS_Store
+*.DS_Store
+
+# Ficheiros temporários
+*.tmp
+*.log
