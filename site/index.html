@@ -52,13 +52,16 @@
     }
     .qz-screen.qz-active { display: flex; }
 
-    /* vertical centering for all screens except quiz questions */
-    #qz-intro,
-    #qz-loading,
-    #qz-result,
-    #qz-vsl    { justify-content: center; }
+    /* loading: center in both axes (no footer) */
+    #qz-loading { justify-content: center; align-items: center; }
 
-    #qz-loading { align-items: center; }
+    /* other screens: body wrapper absorbs free space and centers content */
+    .qz-screen-body {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
 
     /* ── Shared label ─────────────────────────────── */
     .qz-label {
@@ -88,7 +91,7 @@
     }
 
     /* ── Questions ────────────────────────────────── */
-    .qz-quiz-top { margin-bottom: 0; }
+    .qz-quiz-top { margin-bottom: 20px; }
 
     #qz-progress-bar {
       width: 100%;
@@ -362,7 +365,6 @@
 
     /* ── Legal footer (intro + VSL only) ─────────── */
     .qz-legal-footer {
-      margin-top: auto;
       padding-top: 28px;
       display: flex;
       justify-content: center;
@@ -380,10 +382,12 @@
 
 <!-- ① Intro -->
 <div id="qz-intro" class="qz-screen qz-active">
-  <div class="qz-label">Test gratuito · 1 minuto</div>
-  <h1 class="qz-h1">¿Te cuesta moverte como antes? Descubre tu nivel de rigidez en 1 minuto</h1>
-  <p class="qz-subtitle">Responde 6 preguntas rápidas y recibe un plan adaptado para hacer desde tu silla.</p>
-  <button class="qz-btn-primary" onclick="qzStart()">Empezar el test →</button>
+  <div class="qz-screen-body">
+    <div class="qz-label">Test gratuito · 1 minuto</div>
+    <h1 class="qz-h1">¿Te cuesta moverte como antes? Descubre tu nivel de rigidez en 1 minuto</h1>
+    <p class="qz-subtitle">Responde 6 preguntas rápidas y recibe un plan adaptado para hacer desde tu silla.</p>
+    <button class="qz-btn-primary" onclick="qzStart()">Empezar el test →</button>
+  </div>
   <footer class="qz-legal-footer">
     <a href="aviso-legal.html">Aviso legal</a><span>·</span>
     <a href="privacidad.html">Política de privacidad</a><span>·</span>
@@ -412,22 +416,26 @@
 
 <!-- ④ Resultado -->
 <div id="qz-result" class="qz-screen">
-  <span class="qz-badge" id="qz-badge"></span>
-  <div class="qz-result-title" id="qz-rtitle"></div>
-  <div class="qz-result-desc" id="qz-rdesc"></div>
-  <div class="qz-result-cta">Mira este vídeo corto para ver cómo funciona el Reto 21 Días 👇</div>
-  <button class="qz-btn-primary" onclick="qzGoVSL()">Ver el vídeo ahora →</button>
+  <div class="qz-screen-body">
+    <span class="qz-badge" id="qz-badge"></span>
+    <div class="qz-result-title" id="qz-rtitle"></div>
+    <div class="qz-result-desc" id="qz-rdesc"></div>
+    <div class="qz-result-cta">Mira este vídeo corto para ver cómo funciona el Reto 21 Días 👇</div>
+    <button class="qz-btn-primary" onclick="qzGoVSL()">Ver el vídeo ahora →</button>
+  </div>
 </div>
 
 <!-- ⑤ VSL -->
 <div id="qz-vsl" class="qz-screen">
-  <div class="qz-vsl-title">Cómo funciona el Reto 21 Días: Tai Chi en Silla</div>
-  <div class="qz-video-wrap" id="qz-video-wrap"></div>
-  <a id="qz-cta" class="qz-btn-checkout qz-hidden" href="#" onclick="qzCheckout()">
-    Quiero empezar el Reto 21 Días →
-  </a>
-  <p class="qz-guarantee">🔒 Pago único · Acceso inmediato · Garantía de 7 días</p>
-  <p class="qz-disclaimer">Este programa no sustituye el consejo médico. Consulta a tu médico si tienes alguna lesión o problema de salud.</p>
+  <div class="qz-screen-body">
+    <div class="qz-vsl-title">Cómo funciona el Reto 21 Días: Tai Chi en Silla</div>
+    <div class="qz-video-wrap" id="qz-video-wrap"></div>
+    <a id="qz-cta" class="qz-btn-checkout qz-hidden" href="#" onclick="qzCheckout()">
+      Quiero empezar el Reto 21 Días →
+    </a>
+    <p class="qz-guarantee">🔒 Pago único · Acceso inmediato · Garantía de 7 días</p>
+    <p class="qz-disclaimer">Este programa no sustituye el consejo médico. Consulta a tu médico si tienes alguna lesión o problema de salud.</p>
+  </div>
   <footer class="qz-legal-footer">
     <a href="aviso-legal.html">Aviso legal</a><span>·</span>
     <a href="privacidad.html">Política de privacidad</a><span>·</span>
