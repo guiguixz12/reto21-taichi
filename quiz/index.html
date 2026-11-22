@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#4a7c59">
+  <title>Test de Rigidez Corporal · Tai Chi en Silla</title>
+
+  <!-- ══════════════════════════════════════════
+       CONFIGURACIÓN — edita estas 4 variables
+  ══════════════════════════════════════════ -->
+  <script>
+    var CONFIG = {
+      PIXEL_ID:             'TU_PIXEL_ID',
+      CHECKOUT_URL:         'https://pay.hotmart.com/TU_CHECKOUT',
+      VIDEO_URL:            'https://tudominio.com/vsl.mp4',
+      BUTTON_DELAY_SECONDS: 0
+    };
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:       #4a7c59;
+      --green-dark:  #376145;
+      --green-light: #e8f0eb;
+      --beige:       #f7f3ec;
+      --text:        #1a1a1a;
+      --muted:       #666;
+      --white:       #ffffff;
+      --radius:      14px;
+    }
+
+    html { font-size: 20px; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      background: var(--beige);
+      color: var(--text);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 520px;
+      padding: 24px 20px 48px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Progress bar ── */
+    #progress-bar {
+      width: 100%;
+      height: 7px;
+      background: #d9e6dd;
+      border-radius: 999px;
+      margin-bottom: 28px;
+      overflow: hidden;
+    }
+    #progress-fill {
+      height: 100%;
+      background: var(--green);
+      border-radius: 999px;
+      transition: width .4s ease;
+      width: 0%;
+    }
+
+    /* ── Screens ── */
+    .screen { display: none; flex-direction: column; flex: 1; }
+    .screen.active { display: flex; }
+
+    /* ── Intro ── */
+    .hero-icon { font-size: 3.2rem; text-align: center; margin-bottom: 20px; }
+
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 14px;
+    }
+
+    .subtitle {
+      font-size: 0.88rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    /* ── Question ── */
+    .q-step {
+      font-size: 0.72rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--green);
+      margin-bottom: 10px;
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 24px;
+    }
+
+    /* ── Options ── */
+    .options { display: flex; flex-direction: column; gap: 12px; }
+
+    .opt-btn {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 60px;
+      padding: 14px 18px;
+      background: var(--white);
+      border: 2px solid #d9e6dd;
+      border-radius: var(--radius);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      cursor: pointer;
+      text-align: left;
+      transition: border-color .15s, background .15s, transform .1s;
+      -webkit-tap-highlight-color: transparent;
+      width: 100%;
+    }
+    .opt-btn:active { transform: scale(.98); }
+    .opt-btn.selected {
+      border-color: var(--green);
+      background: var(--green-light);
+    }
+    .opt-emoji { font-size: 1.3rem; flex-shrink: 0; }
+
+    /* ── Back button ── */
+    .btn-back {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 0.8rem;
+      cursor: pointer;
+      padding: 10px 0;
+      margin-top: 20px;
+      align-self: flex-start;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ── Primary CTA ── */
+    .btn-primary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 60px;
+      background: var(--green);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(74,124,89,.30);
+      transition: background .15s;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .btn-primary:active { background: var(--green-dark); }
+
+    /* ── Loading ── */
+    #screen-loading {
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+    }
+    .loading-text {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--green);
+    }
+    .loading-dots span {
+      display: inline-block;
+      width: 11px;
+      height: 11px;
+      background: var(--green);
+      border-radius: 50%;
+      margin: 0 4px;
+      animation: bounce .9s infinite both;
+    }
+    .loading-dots span:nth-child(2) { animation-delay: .15s; }
+    .loading-dots span:nth-child(3) { animation-delay: .30s; }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: scale(.55); opacity: .4; }
+      40%            { transform: scale(1);   opacity: 1;   }
+    }
+
+    /* ── Result ── */
+    .result-badge {
+      display: inline-block;
+      padding: 6px 18px;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 14px;
+    }
+    .badge-low  { background: #d4edda; color: #1a5c2a; }
+    .badge-mid  { background: #fff3cd; color: #856404; }
+    .badge-high { background: #f8d7da; color: #842029; }
+
+    .result-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+    .result-desc {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: var(--muted);
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 24px;
+      border-left: 4px solid var(--green);
+    }
+    .result-cta-label {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    /* ── VSL ── */
+    .vsl-title {
+      font-size: 1.05rem;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 16px;
+      line-height: 1.35;
+    }
+    .video-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #111;
+      border-radius: var(--radius);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .video-wrap video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .btn-checkout {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      min-height: 64px;
+      background: #e8630a;
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      font-size: 1.05rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(232,99,10,.35);
+      transition: background .15s, opacity .3s;
+      text-decoration: none;
+      -webkit-tap-highlight-color: transparent;
+      margin-bottom: 10px;
+    }
+    .btn-checkout:active { background: #c4520a; }
+    .btn-checkout.hidden { display: none; }
+
+    .guarantee {
+      text-align: center;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .disclaimer {
+      font-size: 0.68rem;
+      color: #999;
+      text-align: center;
+      line-height: 1.55;
+      border-top: 1px solid #e0e0e0;
+      padding-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- Progress bar -->
+  <div id="progress-bar" style="display:none">
+    <div id="progress-fill"></div>
+  </div>
+
+  <!-- ① INTRO -->
+  <div id="screen-intro" class="screen active">
+    <div class="hero-icon">🧘</div>
+    <h1>¿Te cuesta moverte como antes? Descubre tu nivel de rigidez en 1 minuto</h1>
+    <p class="subtitle">Responde 6 preguntas rápidas y recibe un plan adaptado para hacer desde tu silla.</p>
+    <button class="btn-primary" onclick="startQuiz()">Empezar el test →</button>
+  </div>
+
+  <!-- ② PREGUNTA (una a la vez) -->
+  <div id="screen-quiz" class="screen">
+    <div class="q-step" id="q-step-label"></div>
+    <h2 id="q-text"></h2>
+    <div class="options" id="q-options"></div>
+    <button class="btn-back" id="btn-back" onclick="goBack()">← Atrás</button>
+  </div>
+
+  <!-- ③ CARGANDO -->
+  <div id="screen-loading" class="screen">
+    <div class="loading-text">Analizando tus respuestas…</div>
+    <div class="loading-dots">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+
+  <!-- ④ RESULTADO -->
+  <div id="screen-result" class="screen">
+    <span class="result-badge" id="result-badge"></span>
+    <div class="result-title" id="result-title"></div>
+    <div class="result-desc" id="result-desc"></div>
+    <div class="result-cta-label">Mira este vídeo corto para ver cómo funciona el Reto 21 Días 👇</div>
+    <button class="btn-primary" onclick="goToVSL()">Ver el vídeo ahora →</button>
+  </div>
+
+  <!-- ⑤ VSL -->
+  <div id="screen-vsl" class="screen">
+    <div class="vsl-title">Cómo funciona el Reto 21 Días: Tai Chi en Silla</div>
+    <div class="video-wrap" id="video-wrap"></div>
+    <a id="btn-checkout" class="btn-checkout hidden" href="#" onclick="trackCheckout()">
+      Quiero empezar el Reto 21 Días →
+    </a>
+    <p class="guarantee">🔒 Pago único · Acceso inmediato · Garantía de 7 días</p>
+    <p class="disclaimer">Este programa no sustituye el consejo médico. Consulta a tu médico si tienes alguna lesión o problema de salud.</p>
+  </div>
+
+</div>
+
+<!-- Meta Pixel (carga asíncrona, no bloquea render) -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+if(CONFIG.PIXEL_ID && CONFIG.PIXEL_ID!=='TU_PIXEL_ID'){
+  fbq('init',CONFIG.PIXEL_ID);
+  fbq('track','PageView');
+}
+</script>
+
+<script>
+// ── Quiz data ──────────────────────────────────────────────────────
+var QUESTIONS = [
+  {
+    text: '¿Qué edad tienes?',
+    opts: [
+      { label: '50-59 años',    emoji: '🌱', score: 1, key: null },
+      { label: '60-69 años',    emoji: '🌿', score: 2, key: null },
+      { label: '70 años o más', emoji: '🌳', score: 3, key: null }
+    ]
+  },
+  {
+    text: '¿Te cuesta levantarte de la silla o del sofá?',
+    opts: [
+      { label: 'No, nada',     emoji: '😊', score: 0, key: null },
+      { label: 'A veces',      emoji: '😐', score: 2, key: null },
+      { label: 'Sí, bastante', emoji: '😣', score: 3, key: null }
+    ]
+  },
+  {
+    text: '¿Dónde notas más rigidez?',
+    opts: [
+      { label: 'Cuello y hombros',   emoji: '🧊', score: 2, key: 'cuello y hombros' },
+      { label: 'Espalda',            emoji: '🧊', score: 2, key: 'la espalda' },
+      { label: 'Rodillas y caderas', emoji: '🧊', score: 2, key: 'rodillas y caderas' },
+      { label: 'En todo el cuerpo',  emoji: '🧊', score: 3, key: 'todo el cuerpo' }
+    ]
+  },
+  {
+    text: '¿Cuántas horas pasas sentado al día?',
+    opts: [
+      { label: 'Menos de 4 horas',  emoji: '🕒', score: 1, key: null },
+      { label: 'Entre 4 y 7 horas', emoji: '🕕', score: 2, key: null },
+      { label: 'Más de 7 horas',    emoji: '🕗', score: 3, key: null }
+    ]
+  },
+  {
+    text: '¿Has probado algún ejercicio antes?',
+    opts: [
+      { label: 'Gimnasio, pero lo dejé',       emoji: '🏋️', score: 2, key: null },
+      { label: 'Yoga, pero era muy difícil',   emoji: '🧘', score: 2, key: null },
+      { label: 'Nunca he hecho nada',          emoji: '🛋️', score: 3, key: null },
+      { label: 'Hago algo de ejercicio',       emoji: '🚶', score: 1, key: null }
+    ]
+  },
+  {
+    text: '¿Cuánto tiempo podrías dedicar al día?',
+    opts: [
+      { label: '5 minutos',  emoji: '⏱️', score: 0, key: '5 minutos' },
+      { label: '10 minutos', emoji: '⏱️', score: 0, key: '10 minutos' },
+      { label: '15 minutos', emoji: '⏱️', score: 0, key: '15 minutos' }
+    ]
+  }
+];
+
+// ── State ──────────────────────────────────────────────────────────
+var answers = []; // { score, key } indexed by question
+var currentQ = 0;
+
+// ── Helpers ───────────────────────────────────────────────────────
+function show(id) {
+  document.querySelectorAll('.screen').forEach(function(s) {
+    s.classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+}
+
+function setProgress(step) {
+  var bar = document.getElementById('progress-bar');
+  if (!step) { bar.style.display = 'none'; return; }
+  bar.style.display = 'block';
+  document.getElementById('progress-fill').style.width = (step / 6 * 100) + '%';
+}
+
+function pixel(event, params) {
+  if (typeof fbq === 'function') {
+    if (params) fbq('trackCustom', event, params);
+    else        fbq('track', event);
+  }
+}
+
+function buildCheckoutUrl() {
+  var base   = CONFIG.CHECKOUT_URL;
+  var src    = new URLSearchParams(window.location.search);
+  var fwd    = ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','ad_id'];
+  var out    = new URLSearchParams();
+  fwd.forEach(function(k) { if (src.has(k)) out.set(k, src.get(k)); });
+  var qs = out.toString();
+  if (!qs) return base;
+  return base + (base.indexOf('?') >= 0 ? '&' : '?') + qs;
+}
+
+function totalScore() {
+  var s = 0;
+  answers.forEach(function(a) { if (a) s += a.score; });
+  return s;
+}
+
+// ── Flow ──────────────────────────────────────────────────────────
+function startQuiz() {
+  pixel('QuizStart');
+  answers   = [];
+  currentQ  = 0;
+  renderQ();
+}
+
+function renderQ() {
+  var q = QUESTIONS[currentQ];
+  setProgress(currentQ + 1);
+
+  document.getElementById('q-step-label').textContent =
+    'Pregunta ' + (currentQ + 1) + ' de 6';
+  document.getElementById('q-text').textContent = q.text;
+
+  var container = document.getElementById('q-options');
+  container.innerHTML = '';
+
+  q.opts.forEach(function(opt) {
+    var btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.innerHTML =
+      '<span class="opt-emoji">' + opt.emoji + '</span>' +
+      '<span>' + opt.label + '</span>';
+    btn.addEventListener('click', function() { pickOpt(opt, btn); });
+
+    // Restore selection if user goes back
+    if (answers[currentQ] && answers[currentQ].label === opt.label) {
+      btn.classList.add('selected');
+    }
+
+    container.appendChild(btn);
+  });
+
+  document.getElementById('btn-back').style.visibility =
+    currentQ === 0 ? 'hidden' : 'visible';
+
+  show('screen-quiz');
+}
+
+function pickOpt(opt, btn) {
+  btn.classList.add('selected');
+  answers[currentQ] = { score: opt.score, key: opt.key, label: opt.label };
+
+  setTimeout(function() {
+    if (currentQ < QUESTIONS.length - 1) {
+      currentQ++;
+      renderQ();
+    } else {
+      showLoading();
+    }
+  }, 220);
+}
+
+function goBack() {
+  if (currentQ === 0) return;
+  currentQ--;
+  renderQ();
+}
+
+function showLoading() {
+  setProgress(0);
+  show('screen-loading');
+  setTimeout(showResult, 2000);
+}
+
+function showResult() {
+  var score = totalScore();
+  var zone  = (answers[2] && answers[2].key) || 'el cuerpo';
+  var time  = (answers[5] && answers[5].key) || '10 minutos';
+
+  var level, badgeClass, title;
+  if (score <= 6) {
+    level      = 'Rigidez leve';
+    badgeClass = 'badge-low';
+    title      = '¡Buenas noticias! Tu cuerpo responde bien';
+  } else if (score <= 11) {
+    level      = 'Rigidez moderada';
+    badgeClass = 'badge-mid';
+    title      = 'Tu cuerpo te está pidiendo más movimiento';
+  } else {
+    level      = 'Rigidez alta';
+    badgeClass = 'badge-high';
+    title      = 'Tu cuerpo necesita atención, pero tiene solución';
+  }
+
+  var desc =
+    'Tu cuerpo acumula tensión en ' + zone + '. ' +
+    'Con solo ' + time + ' al día desde tu silla puedes empezar a notar más soltura.';
+
+  var badge = document.getElementById('result-badge');
+  badge.textContent  = level;
+  badge.className    = 'result-badge ' + badgeClass;
+
+  document.getElementById('result-title').textContent = title;
+  document.getElementById('result-desc').textContent  = desc;
+
+  pixel('QuizComplete', { level: level });
+  show('screen-result');
+}
+
+function goToVSL() {
+  var wrap = document.getElementById('video-wrap');
+
+  // Lazy-create video — zero bytes loaded before this moment
+  if (!wrap.querySelector('video')) {
+    var vid         = document.createElement('video');
+    vid.src         = CONFIG.VIDEO_URL;
+    vid.controls    = true;
+    vid.preload     = 'none';
+    vid.playsInline = true;
+    // vid.poster   = 'poster.webp';  // ← descomenta si tienes miniatura WebP
+    wrap.appendChild(vid);
+
+    var delay = parseInt(CONFIG.BUTTON_DELAY_SECONDS, 10) || 0;
+    var cta   = document.getElementById('btn-checkout');
+    cta.href  = buildCheckoutUrl();
+
+    if (delay <= 0) {
+      cta.classList.remove('hidden');
+    } else {
+      vid.addEventListener('timeupdate', function onTime() {
+        if (vid.currentTime >= delay) {
+          cta.classList.remove('hidden');
+          vid.removeEventListener('timeupdate', onTime);
+        }
+      });
+    }
+  }
+
+  pixel('ViewContent');
+  setProgress(0);
+  show('screen-vsl');
+}
+
+function trackCheckout() {
+  pixel('InitiateCheckout');
+  // navigation continues normally via href
+}
+</script>
+
+</body>
+</html>
