@@ -319,6 +319,61 @@
       border-top: 1px solid #e0e0e0;
       padding-top: 16px;
     }
+
+    /* ── Cookie banner ───────────────────────────── */
+    #qz-cookie-banner {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: #fff;
+      border-top: 1px solid #e0e0e0;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      z-index: 9999;
+      font-size: 0.72rem;
+      color: var(--muted);
+      box-shadow: 0 -2px 8px rgba(0,0,0,.06);
+    }
+    #qz-cookie-banner[hidden] { display: none; }
+    #qz-cookie-banner p { flex: 1; min-width: 160px; line-height: 1.4; }
+    #qz-cookie-banner a { color: var(--green); text-decoration: underline; white-space: nowrap; }
+    .qz-cb-actions { display: flex; gap: 8px; flex-shrink: 0; }
+    .qz-cb-btn {
+      min-height: 36px;
+      padding: 0 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      background: #fff;
+      font-size: 0.72rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      color: var(--text);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .qz-cb-btn.qz-cb-accept { background: var(--green); color: #fff; border-color: var(--green); }
+    .qz-cb-btn:active { opacity: .8; }
+
+    /* screens grow so banner never covers bottom buttons */
+    body.qz-has-banner .qz-screen { padding-bottom: 76px; }
+
+    /* ── Legal footer (intro + VSL only) ─────────── */
+    .qz-legal-footer {
+      margin-top: auto;
+      padding-top: 28px;
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      font-size: 0.65rem;
+      color: #bbb;
+    }
+    .qz-legal-footer a { color: #bbb; text-decoration: none; }
+    .qz-legal-footer a:hover { text-decoration: underline; }
+    .qz-legal-footer span { color: #ddd; }
   </style>
 </head>
 <body>
@@ -329,6 +384,11 @@
   <h1 class="qz-h1">¿Te cuesta moverte como antes? Descubre tu nivel de rigidez en 1 minuto</h1>
   <p class="qz-subtitle">Responde 6 preguntas rápidas y recibe un plan adaptado para hacer desde tu silla.</p>
   <button class="qz-btn-primary" onclick="qzStart()">Empezar el test →</button>
+  <footer class="qz-legal-footer">
+    <a href="aviso-legal.html">Aviso legal</a><span>·</span>
+    <a href="privacidad.html">Política de privacidad</a><span>·</span>
+    <a href="cookies.html">Política de cookies</a>
+  </footer>
 </div>
 
 <!-- ② Pregunta -->
@@ -368,19 +428,48 @@
   </a>
   <p class="qz-guarantee">🔒 Pago único · Acceso inmediato · Garantía de 7 días</p>
   <p class="qz-disclaimer">Este programa no sustituye el consejo médico. Consulta a tu médico si tienes alguna lesión o problema de salud.</p>
+  <footer class="qz-legal-footer">
+    <a href="aviso-legal.html">Aviso legal</a><span>·</span>
+    <a href="privacidad.html">Política de privacidad</a><span>·</span>
+    <a href="cookies.html">Política de cookies</a>
+  </footer>
 </div>
 
-<!-- Meta Pixel (async) -->
+<!-- Meta Pixel — carga solo si hay consentimiento -->
 <script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
-(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-if(QCFG.PIXEL_ID&&QCFG.PIXEL_ID!=='TU_PIXEL_ID'){
-  fbq('init',QCFG.PIXEL_ID);
-  fbq('track','PageView');
+function loadPixel(){
+  if(typeof fbq==='undefined'){
+    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+    (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+  }
+  if(QCFG.PIXEL_ID&&QCFG.PIXEL_ID!=='TU_PIXEL_ID'){
+    fbq('init',QCFG.PIXEL_ID);
+    fbq('track','PageView');
+  }
 }
+(function(){
+  var consent=null;
+  try{consent=localStorage.getItem('reto21_cookie_consent');}catch(e){}
+  if(consent==='accepted'){loadPixel();return;}
+  if(consent==='rejected'){return;}
+  /* sin decisión — mostrar banner */
+  document.body.classList.add('qz-has-banner');
+  document.getElementById('qz-cookie-banner').removeAttribute('hidden');
+  document.getElementById('qz-accept-cookies').addEventListener('click',function(){
+    try{localStorage.setItem('reto21_cookie_consent','accepted');}catch(e){}
+    document.getElementById('qz-cookie-banner').setAttribute('hidden','');
+    document.body.classList.remove('qz-has-banner');
+    loadPixel();
+  });
+  document.getElementById('qz-reject-cookies').addEventListener('click',function(){
+    try{localStorage.setItem('reto21_cookie_consent','rejected');}catch(e){}
+    document.getElementById('qz-cookie-banner').setAttribute('hidden','');
+    document.body.classList.remove('qz-has-banner');
+  });
+})();
 </script>
 
 <!-- Quiz logic -->
@@ -535,6 +624,15 @@ if(QCFG.PIXEL_ID&&QCFG.PIXEL_ID!=='TU_PIXEL_ID'){
   window.qzCheckout=function(){px('InitiateCheckout');};
 })();
 </script>
+
+<!-- Banner de cookies -->
+<div id="qz-cookie-banner" hidden role="region" aria-label="Preferencias de cookies">
+  <p>Usamos cookies para medir el rendimiento de nuestros anuncios. <a href="cookies.html">Más información</a></p>
+  <div class="qz-cb-actions">
+    <button id="qz-reject-cookies" class="qz-cb-btn">Rechazar</button>
+    <button id="qz-accept-cookies" class="qz-cb-btn qz-cb-accept">Aceptar</button>
+  </div>
+</div>
 
 </body>
 </html>
